@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>边界</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="300" height="300" style="background:#ccc"></canvas>
+    <p id='log'>
+        <p>
+            <script src="../until.js"></script>
+            <script src="../ball.js"></script>
+            <script>
+                window.onload = function() {
+                    var can = document.getElementById('canvas');
+                    var ctx = can.getContext('2d');
+                    var log = document.getElementById('log');
+                    var bls = []
+                    for (var i = 0; i < 10; i++) {
+                        var bl = new ball();
+                        bl.x = Math.random() * can.width;
+                        bl.y = Math.random() * can.height;
+                        bl.radius = 30 * Math.random() + 10;
+                        bl.vx = 2 * Math.random() - 1;
+                        bl.vy = 2 * Math.random() - 1;
+                        bl.id = 'ball-' + i;
+                        bls.push(bl);
+                    }
+
+                    function blDraw(bl, pos) {
+                        if (bl.x - bl.radius > can.width || bl.x + bl.radius < 0 || bl.y - bl.radius > can.height || bl.y + bl.radius < 0) {
+                            //超过边界删除
+                            // log.innerHTML += bl.id + '<br/>';
+                            // bls.splice(pos, 1);
+
+                            //循环
+                            bl.x = can.width / 2;
+                            bl.y = can.height + bl.radius;
+                            bl.vx = 2 * Math.random() - 1;
+                            bl.vy = -2 * Math.random() - 1;
+                            bl.draw(ctx);
+                        } else {
+                            bl.draw(ctx)
+                        }
+                    }
+                    (function drawFrame() {
+                        window.requestAnimationFrame(drawFrame, can);
+                        ctx.clearRect(0, 0, can.width, can.height);
+                        for (var i = 0; i < bls.length; i++) {
+                            bls[i].x += bls[i].vx;
+                            bls[i].y += bls[i].vy;
+                            blDraw(bls[i], i)
+                        }
+                    })()
+                }
+            </script>
+</body>

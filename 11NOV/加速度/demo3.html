@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>重力加速度</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="300" height="300" style="background:#ccc"></canvas>
+    <script src="../until.js"></script>
+    <script src="../ball.js"></script>
+    <script>
+        window.onload = function() {
+            var can = document.getElementById('canvas');
+            var ctx = can.getContext('2d');
+            var bl = new ball(),
+                vx = 0,
+                vy = 0,
+                a = 0.5,
+                bounce = -0.8,
+                ang = 30;
+            bl.x = can.width / 2;
+            bl.y = can.height / 2 - 100;
+
+            function getBottom(ball) {
+                if (ball.y + ball.radius > can.height) {
+                    ball.y = can.height - ball.radius;
+                    vy *= bounce;
+                }
+            }
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, can);
+                ctx.clearRect(0, 0, can.width, can.height);
+                vy += a;
+                bl.y += vy;
+                getBottom(bl);
+                bl.draw(ctx);
+            })()
+        }
+    </script>
+</body>
+
+</html>

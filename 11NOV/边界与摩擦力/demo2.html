@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>边界</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="300" height="300" style="background:#ccc"></canvas>
+    <p id='log'>
+        <p>
+            <script src="../until.js"></script>
+            <script src="../space.js"></script>
+            <script>
+                window.onload = function() {
+                    var can = document.getElementById('canvas');
+                    var ctx = can.getContext('2d');
+                    var sp = new space();
+                    sp.x = can.width / 2;
+                    sp.y = can.height / 2;
+                    var ar = 0,
+                        a = 0,
+                        vx = 0,
+                        vy = 0,
+                        ang = 0;
+                    window.addEventListener('keydown', function(event) {
+                        switch (event.keyCode) {
+                            case 37:
+                                ar = -3;
+                                vx = 0;
+                                vy = 0;
+                                break;
+                            case 39:
+                                ar = 3;
+                                vx = 0;
+                                vy = 0;
+                                break;
+                            case 38:
+                                sp.showFlame = true;
+                                a = 0.05
+                                break;
+                            case 40:
+                                a = -0.02
+                                break;
+                            default:
+                        }
+                    });
+                    window.addEventListener('keyup', function(event) {
+                        ar = 0;
+                        a = 0;
+                        sp.showFlame = false;
+                    });
+                    (function drawFrame() {
+                        window.requestAnimationFrame(drawFrame, can);
+                        ctx.clearRect(0, 0, can.width, can.height);
+                        ang += ar * Math.PI / 180;
+                        sp.rotate = ang;
+                        vx += Math.cos(ang) * a;
+                        vy += Math.sin(ang) * a;
+                        sp.x += vx;
+                        sp.y += vy;
+                        if (sp.x - sp.width / 2 > can.width) {
+                            sp.x = 0;
+                        } else if (sp.x + sp.width / 2 < 0) {
+                            sp.x = can.width;
+                        } else if (sp.y - sp.height / 2 > can.height) {
+                            sp.y = 0;
+                        } else if (sp.y + sp.height / 2 < 0) {
+                            sp.y = can.height;
+                        }
+                        sp.draw(ctx);
+                    })()
+                }
+            </script>
+</body>

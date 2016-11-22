@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>正圆运动</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="300" height="300" style="background:#ccc"></canvas>
+    <p id='log'></p>
+    <script src="../until.js"></script>
+    <script src="../ball.js"></script>
+    <script>
+        window.onload = function() {
+            var can = document.getElementById('canvas');
+            var ctx = can.getContext('2d');
+            var log = document.getElementById('log');
+            var myball = new ball();
+            //两点距离
+            var move = untils.getMouseMove(can);
+            canvas.style.position = 'relative';
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, can);
+                ctx.clearRect(0, 0, can.width, can.height);
+
+                var dx = move.x - can.width / 2;
+                var dy = move.y - can.height / 2;
+                //hua rect
+
+                ctx.fillStyle = '#fff';
+                ctx.rect(can.width / 2 - 2, can.height / 2 - 2, 4, 4);
+                //line
+                ctx.save();
+                ctx.moveTo(move.x, move.y);
+                ctx.lineTo(can.width / 2, can.height / 2);
+                ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
+                log.style.position = 'absolute';
+                log.style.left = (move.x + can.width / 2) / 2 + 'px';
+                log.style.top = (move.y + can.height / 2) / 2 + 'px';
+                log.innerHTML = Math.sqrt(dx * dx + dy * dy);
+            })()
+        }
+    </script>
+</body>
+
+</html>

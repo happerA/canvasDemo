@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>匀速</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="300" height="300" style="background:#ccc"></canvas>
+    <script src="../until.js"></script>
+    <script src="../arrow.js"></script>
+    <script>
+        window.onload = function() {
+            var can = document.getElementById('canvas');
+            var ctx = can.getContext('2d');
+            var aow = new arrow(),
+                ang = 0,
+                speed = 2;
+            aow.x = can.width / 2;
+            aow.x = can.height / 2;
+            var move = untils.getMouseMove(can);
+
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, can);
+                ctx.clearRect(0, 0, can.width, can.height);
+                var dx = move.x - aow.x;
+                var dy = move.y - aow.y;
+                ang = Math.atan2(dy, dx);
+                aow.rotate = ang;
+                aow.x += Math.cos(ang) * speed;
+                aow.y += Math.sin(ang) * speed;
+                aow.draw(ctx);
+            })()
+        }
+    </script>
+</body>
+
+</html>

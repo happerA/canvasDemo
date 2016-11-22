@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>弹性运动</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="600" height="300" style="background:#ccc"></canvas>
+    <p id='log'>
+    </p>
+    <script src="../until.js"></script>
+    <script src="../ball.js"></script>
+    <script>
+        window.onload = function() {
+            var can = document.getElementById('canvas');
+            var ctx = can.getContext('2d');
+            var log = document.getElementById('log');
+            var bl = new ball();
+            var blSm = new ball();
+            var ease = 0.01;
+            bl.x = 50;
+            bl.y = can.height / 2;
+            bl.radius = 30;
+            blSm.x = 10;
+            blSm.y = can.height / 2;
+            blSm.radius = 10;
+            //非定点
+            var move = untils.getMouseMove(can);
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, can);
+                ctx.clearRect(0, 0, can.width, can.height);
+                //定点缓速运动
+                var a = (can.width / 2 - bl.x) * ease;
+                bl.vx += a;
+                bl.x += bl.vx;
+                //非定点
+                // blSm.vx = (bl.x - blSm.x) * ease;
+                // bl.vx = (move.x - bl.x) * ease;
+                // blSm.vy = (bl.y - blSm.y) * ease;
+                // bl.vy = (move.y - bl.y) * ease;
+                // blSm.x += blSm.vx;
+                // bl.x += bl.vx;
+                // blSm.y += blSm.vy;
+                // bl.y += bl.vy;
+                bl.draw(ctx);
+                // blSm.draw(ctx);
+            })()
+        }
+    </script>
+</body>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>重力加速度</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="300" height="300" style="background:#ccc"></canvas>
+    <script src="../until.js"></script>
+    <script src="../space.js"></script>
+    <script>
+        window.onload = function() {
+            var can = document.getElementById('canvas');
+            var ctx = can.getContext('2d');
+            var sp = new space(),
+                vx = 0,
+                vy = 0,
+                a = .05,
+                ang = 0,
+                ar = 0;
+            sp.x = can.width / 2;
+            sp.y = can.height / 2 - 100;
+
+            window.addEventListener('keydown', function(event) {
+                switch (event.keyCode) {
+                    case 37: //left
+                        ar = -3;
+                        vx = 0;
+                        vy = 0;
+                        break
+                    case 39: //right
+                        ar = 3;
+                        vx = 0;
+                        vy = 0;
+                        break
+                    case 38: //left
+                        sp.showFlame = true;
+                        a = 0.05;
+                        break;
+                    case 40: //left
+                        vx = 0;
+                        vy = 0;
+                        break
+                }
+            });
+            window.addEventListener('keyup', function() {
+                sp.showFlame = false;
+                ar = 0;
+                a = 0;
+            })
+
+            function getPos(space) {
+                if (space.x > can.width) {
+                    space.x = can.width - 10;
+                    vx = 0;
+                    vy = 0;
+                }
+                if (space.y > can.height) {
+                    space.y = can.height - 10;
+                    vx = 0;
+                    vy = 0;
+                }
+                if (space.x < 0) {
+                    space.x = 10;
+                    vx = 0;
+                    vy = 0;
+                }
+                if (space.y > can.height) {
+                    space.y = 10;
+                    vx = 0;
+                    vy = 0;
+                }
+            }
+
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, can);
+                ctx.clearRect(0, 0, can.width, can.height);
+                sp.rotate += ar;
+                ang = sp.rotate;
+                vy += a * Math.sin(ang);
+                vx += a * Math.cos(ang);
+                sp.rotate += ar;
+                sp.x += vx;
+                sp.y += vy;
+                getPos(sp);
+                sp.draw(ctx);
+            })()
+        }
+    </script>
+</body>
+
+</html>

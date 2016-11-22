@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>物体捕获</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="300" height="300" style="background:#ccc"></canvas>
+    <p id='log'>
+    </p>
+    <script src="../until.js"></script>
+    <script src="../ball.js"></script>
+    <script>
+        window.onload = function() {
+            var can = document.getElementById('canvas');
+            var ctx = can.getContext('2d');
+            var log = document.getElementById('log');
+            var bl = new ball();
+            var move = untils.getMouseMove(can);
+            bl.x = Math.random() * can.width;
+            bl.y = Math.random() * can.height;
+            bl.radius = 30 * Math.random() + 10;
+            bl.draw(ctx);
+            var w = 0,
+                h = 0,
+                a = 0.09,
+                ismove = false;
+            bl.vx = Math.random() * 5;
+            bl.vy = Math.random() * 5;
+            can.addEventListener('mousedown', function() {
+                w = move.x - bl.x;
+                h = move.y - bl.y;
+                ismove = true;
+
+                if (isNear(move, bl) && ismove) {
+                    bl.vx = 0;
+                    bl.vy = 0;
+                    a = 0;
+                    can.addEventListener('mouseup', onmouseup, false);
+                    can.addEventListener('mousemove', onmousemove, false);
+                }
+            }, false);
+
+
+            function onmouseup() {
+                ismove = false
+                a = 0.09;
+                can.removeEventListener('mouseup',
+                    onmouseup, false);
+                can.removeEventListener('mousemove',
+                    onmousemove, false);
+            }
+
+            function onmousemove() {
+                bl.x = move.x - w;
+                bl.y = move.y - h;
+            }
+
+            function isNear(move, bl) {
+                var dx = move.x - bl.x;
+                var dy = move.y - bl.y;
+                var dxy = Math.sqrt(dx * dx + dy * dy)
+                return dxy <= bl.radius;
+            }
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, can);
+                ctx.clearRect(0, 0, can.width, can.height);
+                bl.vy += a;
+                bl.x += bl.vx;
+                bl.y += bl.vy;
+                if (bl.x + bl.radius > can.width) {
+                    bl.x = can.width - bl.radius;
+                    bl.vx *= -1;
+                }
+                if (bl.x - bl.radius < 0) {
+                    bl.x = bl.radius;
+                    bl.vx *= -1;
+                }
+                if (bl.y + bl.radius > can.height) {
+                    bl.y = can.height - bl.radius;
+                    bl.vy *= -1;
+                }
+                if (bl.y - bl.radius < 0) {
+                    bl.y = bl.radius;
+                    bl.vy *= -1;
+                }
+                bl.draw(ctx);
+            })()
+        }
+    </script>
+</body>

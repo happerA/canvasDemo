@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>弹性运动</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="600" height="300" style="background:#ccc"></canvas>
+    <p id='log'>
+    </p>
+    <script src="../until.js"></script>
+    <script src="../ball.js"></script>
+    <script>
+        window.onload = function() {
+            var can = document.getElementById('canvas');
+            var ctx = can.getContext('2d');
+            var log = document.getElementById('log');
+            var bl = new ball();
+            var blSm = new ball();
+            var ease = 0.01,
+                f = 0.95,
+                ax = 0,
+                ay = 0;
+            bl.x = 50;
+            bl.y = can.height / 2;
+            bl.radius = 30;
+            bl.vx = 0;
+            bl.vy = 0;
+            var move = untils.getMouseMove(can);
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, can);
+                ctx.clearRect(0, 0, can.width, can.height);
+                ax = (move.x - bl.x) * ease;
+                ay = (move.y - bl.y) * ease;
+                bl.vx += ax;
+                bl.vy += ay;
+                bl.vx *= f;
+                bl.vy *= f;
+                bl.x += bl.vx;
+                bl.y += bl.vy;
+                //绳球
+                ctx.save();
+                ctx.strokeStyle = '#fff';
+                ctx.beginPath();
+                ctx.moveTo(move.x, move.y);
+                ctx.lineTo(bl.x, bl.y);
+                ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
+                bl.draw(ctx);
+            })()
+        }
+    </script>
+</body>
