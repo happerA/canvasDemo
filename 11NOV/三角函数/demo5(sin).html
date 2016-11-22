@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+
+<body>
+    <canvas id="canvas" width="300" height="300" style="background:#ccc"></canvas>
+    <script src="../until.js"></script>
+    <script src="../ball.js"></script>
+    <script>
+        window.onload = function() {
+            var can = document.getElementById('canvas');
+            var ctx = can.getContext('2d');
+            var xspeed = 1,
+                yspeed = 0.05,
+                range = 5,
+                angle = 0,
+                centerScale = 1;
+            var myball = new ball();
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, can);
+                ctx.clearRect(0, 0, can.width, can.height);
+                //平滑运动
+                // myball.x += xspeed;
+                // if (myball.x > myball.radius + can.width) {
+                //     myball.x = myball.radius;
+                // }
+                // myball.y = can.height / 2 + Math.sin(angle) * 50;
+                // angle += yspeed;
+
+                //脉冲运动
+                angle += yspeed;
+                myball.x = can.width / 2;
+                myball.y = can.height / 2;
+                myball.scaleX = myball.scaleY = centerScale + Math.sin(angle) * range;
+                myball.draw(ctx);
+            })()
+        }
+    </script>
+</body>
+
+</html>

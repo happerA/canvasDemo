@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>弹性运动</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="600" height="300" style="background:#ccc"></canvas>
+    <p id='log'>
+    </p>
+    <script src="../until.js"></script>
+    <script src="../ball.js"></script>
+    <script>
+        window.onload = function() {
+            var can = document.getElementById('canvas');
+            var ctx = can.getContext('2d');
+            var log = document.getElementById('log');
+            var bl = new ball();
+            var blSm = new ball();
+            var ease = 0.01,
+                f = 0.95,
+                w = 0,
+                h = 0,
+                j;
+            bl.x = can.width / 2;
+            bl.y = can.height / 2;
+            bl.radius = 30;
+            bl.vx = 0;
+            bl.vy = 0;
+            var blArr = [];
+            for (var i = 0; i < 3; i++) {
+                var bls = new ball();
+                bls.radius = 10;
+                bls.color = "#ff0";
+                blArr.push(bls);
+            }
+            blArr[0].x = can.width / 2;
+            blArr[0].y = 10;
+            blArr[1].x = 400;
+            blArr[1].y = 200;
+            blArr[2].x = 30;
+            blArr[2].y = 220;
+
+            function drawLine(blSm, bl) {
+                ctx.save();
+                ctx.strokeStyle = '#fff';
+                ctx.beginPath();
+                ctx.moveTo(blSm.x, blSm.y);
+                ctx.lineTo(bl.x, bl.y);
+                ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
+            }
+            var move = untils.getMouseMove(can);
+            can.addEventListener('mousedown', function() {
+                for (var i = 0; i < 3; i++) {
+                    if (blArr[i].x - move.x < 10 && blArr[i].x - move.x > -10) {
+                        j = blArr[i]
+                    }
+                }
+                w = move.x - j.x;
+                h = move.y - j.y;
+                can.addEventListener('mousemove', onmousemove);
+                can.addEventListener('mouseup', onmoveup)
+            })
+
+            function onmousemove() {
+                j.x = move.x;
+                j.y = move.y;
+            }
+
+            function onmoveup() {
+                can.removeEventListener('mousemove', onmousemove);
+                can.removeEventListener('mouseup', onmoveup);
+            }
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, can);
+                ctx.clearRect(0, 0, can.width, can.height);
+                for (var i = 0; i < 3; i++) {
+                    bl.vx = (blArr[i].x - bl.x) * ease;
+                    bl.vy = (blArr[i].y - bl.y) * ease;
+                    bl.vx *= f;
+                    bl.vy *= f;
+                    bl.x += bl.vx;
+                    bl.y += bl.vy;
+                }
+
+
+
+                //绳球
+                for (var i = 0; i < 3; i++) {
+                    drawLine(blArr[i], bl);
+                    blArr[i].draw(ctx);
+                }
+                bl.draw(ctx);
+            })()
+        }
+    </script>
+</body>

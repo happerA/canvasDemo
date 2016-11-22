@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>边界 反弹 摩擦力</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="300" height="300" style="background:#ccc"></canvas>
+    <p id='log'>
+        <p>
+            <script src="../until.js"></script>
+            <script src="../ball.js"></script>
+            <script>
+                window.onload = function() {
+                    var can = document.getElementById('canvas');
+                    var ctx = can.getContext('2d');
+                    var log = document.getElementById('log');
+                    var bl = new ball();
+                    bl.x = Math.random() * can.width;
+                    bl.y = Math.random() * can.height;
+                    bl.radius = 30 * Math.random() + 10;
+                    bl.vx = 50 * Math.random() - 5;
+                    bl.vy = 50 * Math.random() - 5;
+                    var f = 0.97;
+
+                    function blDraw(bl) {
+
+
+                    }
+                    (function drawFrame() {
+                        window.requestAnimationFrame(drawFrame, can);
+                        ctx.clearRect(0, 0, can.width, can.height);
+                        bl.vx *= f;
+                        bl.vy *= f;
+                        bl.x += bl.vx;
+                        bl.y += bl.vy;
+                        if (bl.x + bl.radius > can.width) {
+                            bl.x = can.width - bl.radius;
+                            bl.vx *= -1;
+                        }
+                        if (bl.x - bl.radius < 0) {
+                            bl.x = bl.radius;
+                            bl.vx *= -1;
+                        }
+                        if (bl.y + bl.radius > can.height) {
+                            bl.y = can.height - bl.radius;
+                            bl.vy *= -1;
+                        }
+                        if (bl.y - bl.radius < 0) {
+                            bl.y = bl.radius;
+                            bl.vy *= -1;
+                        }
+
+                        bl.draw(ctx);
+                    })()
+                }
+            </script>
+</body>

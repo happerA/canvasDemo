@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>物体捕获</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="300" height="300" style="background:#ccc"></canvas>
+    <p id='log'>
+    </p>
+    <script src="../until.js"></script>
+    <script src="../ball.js"></script>
+    <script>
+        window.onload = function() {
+            var can = document.getElementById('canvas');
+            var ctx = can.getContext('2d');
+            var log = document.getElementById('log');
+            var bl = new ball();
+            var move = untils.getMouseMove(can);
+            bl.x = Math.random() * can.width;
+            bl.y = Math.random() * can.height;
+            bl.radius = 30 * Math.random() + 10;
+            bl.draw(ctx);
+            can.addEventListener('mousedown', function() {
+                state('down')
+                can.addEventListener('mouseup', function() {
+                    state('up')
+                }, false);
+                can.addEventListener('mousemove', function() {
+                    state('move')
+                }, false);
+            }, false);
+
+
+            function state(wrd) {
+
+                if (isNear(move, bl)) log.innerHTML = wrd;
+                else {
+                    log.innerHTML = 'out ' + wrd;
+                }
+            }
+
+            function isNear(move, bl) {
+                var dx = move.x - bl.x;
+                var dy = move.y - bl.y;
+                var dxy = Math.sqrt(dx * dx + dy * dy)
+                return dxy <= bl.radius;
+            }
+        }
+    </script>
+</body>

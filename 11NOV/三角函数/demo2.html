@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>canvas交互</title>
+</head>
+
+<body>
+    <canvas style='width:500px;height:400px;background:#ccc'></canvas>
+    <script src='until.js'></script>
+    <script>
+        var can = document.getElementsByTagName('canvas')[0];
+        var move = untils.getMouseMove(can)
+        can.addEventListener('mousedown', function(e) {
+            //console.log(move.x + '  ' + move.y)
+
+            //第二种getBoundingClientRect
+            var e = e || window.event;
+            var x = e.clientX + document.body.offsetLeft + document.documentElement.scrollLeft;
+            var y = e.clientY + document.body.offsetTop + document.documentElement.scrollTop;
+            var canBox = can.getBoundingClientRect();
+            console.log((x - canBox.left) + '  ' + (y - canBox.top))
+        })
+    </script>
+</body>
+
+</html>

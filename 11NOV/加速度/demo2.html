@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>变速</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="300" height="300" style="background:#ccc"></canvas>
+    <script src="../until.js"></script>
+    <script src="../ball.js"></script>
+    <script>
+        window.onload = function() {
+            var can = document.getElementById('canvas');
+            var ctx = can.getContext('2d');
+            var bl = new ball(),
+                vx = 0,
+                vy = 0,
+                a = 0.5,
+                ang = 30;
+            bl.x = can.width / 2;
+            bl.y = can.height / 2;
+            (function drawFrame() {
+                window.requestAnimationFrame(drawFrame, can);
+                ctx.clearRect(0, 0, can.width, can.height);
+                vx += Math.cos(ang * Math.PI / 180) * a;
+                vy += Math.sin(ang * Math.PI / 180) * a;
+                bl.x += vx;
+                bl.y += vy;
+                bl.draw(ctx);
+            })()
+        }
+    </script>
+</body>
+
+</html>
